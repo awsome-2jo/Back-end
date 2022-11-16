@@ -1,0 +1,128 @@
+a {
+  text-decoration: none;
+  color: rgb(46, 46, 46);
+}
+body {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+body > * {
+  flex-shrink: 0;
+}
+.map-section {
+  flex-shrink: 1;
+  flex-grow: 1;
+  display: flex;
+}
+/* Map Section */
+#map {
+  height: 100%;
+  flex-grow: 1;
+  background-color: blueviolet;
+}
+.data-list {
+  width: 400px;
+  background-color: #fff;
+  padding: 21px 16px 10px;
+  overflow-y: scroll;
+}
+.data-menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.data-menu button {
+  padding: 10px;
+  width: 100%;
+  background-color: #fff;
+  border: solid 1px #aaa;
+  font-weight: bold;
+}
+.data-menu > button:nth-child(2) {
+  background-color: #5a7a94;
+  color: white;
+}
+.data-sort {
+  padding: 10px;
+  font-size: 17px;
+  display: flex;
+  justify-content: space-evenly;
+}
+.data-sort > a:nth-child(1) {
+  color: #346f9f;
+  font-weight: bold;
+}
+.data-item {
+  list-style: none;
+  display: flex;
+  height: 120px;
+  padding: 20px 20px 20px 0;
+  border-bottom: 1px solid #e2e2e2;
+}
+.data-item > div:nth-child(2) {
+  padding-left: 16px;
+  flex-grow: 1;
+  align-self: center;
+}
+.data-item > div:nth-child(2) > p {
+  margin: 0;
+}
+.data-item > div:nth-child(2) > p:first-child {
+  font-weight: 900;
+  font-size: 1.125em;
+  margin-bottom: 5px;
+}
+.data-item > div:nth-child(2) > p:last-child {
+  color: #444;
+  font-size: 0.825em;
+}
+.data-item > .img-box {
+  flex-grow: 2;
+  height: 100%;
+}
+/* Nav topic */
+.nav-topic ul > li:nth-child(4),
+.nav-topic ul > li:nth-child(4) > a {
+  border-color: var(--main-color);
+  color: var(--main-color);
+}
+
+/* Nav type */
+.nav-type {
+  height: 60px;
+  border-bottom: 1px solid #e2e2e2;
+  box-shadow: 0 5px 3px rgb(234, 234, 234, 0.5);
+  z-index: 1;
+}
+.nav-type > div {
+  height: 100%;
+}
+.nav-type > div > ul {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  padding: 0;
+}
+.nav-type > div > ul > li {
+  list-style: none;
+}
+.nav-type > div > ul > li {
+  margin-right: 16px;
+}
+.nav-type > div > ul button {
+  border: 1px solid #aaa;
+  border-radius: 24px;
+  background-color: #fff;
+  padding: 8px 16px;
+  min-width: 80px;
+  font-size: 0.925em;
+  font-weight: 700;
+  color: #aaa;
+}
+.nav-type > div > ul button:hover,
+.nav-type > div > ul button[selected] {
+  border: 1px solid var(--main-color);
+  color: var(--main-color);
+}

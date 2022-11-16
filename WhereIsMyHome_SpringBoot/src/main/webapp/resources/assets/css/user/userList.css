@@ -1,0 +1,77 @@
+/* Nav topic */
+.nav-topic ul > li:nth-child(5), .nav-topic ul > li:nth-child(5) > a {
+  border-color: var(--main-color);
+  color: var(--main-color);
+}
+.list-container {
+    /* background-color: red; */
+    width: 100%;
+    border-top: 2px solid #000;
+    margin-top: 21px;
+    text-align: center;
+}
+.list-container > thead {
+    height: 55px;
+    border-bottom: 1px solid #aaa;
+}
+.list-container > tbody > tr {
+    height: 45px;
+    border-bottom: 1px solid #eaeaea;
+}
+.list-container > tbody > tr button {
+    margin: 0 2px;
+    width: 55px;
+    height: 28px;
+    line-height: 26px;
+    text-align: center;
+    text-decoration: none;
+    border: 1px solid #aaa;
+    font-size: 12px;
+    cursor: pointer;
+    color: #000;
+}
+h2 {
+    margin-top: 24px;
+    font-weight: bold;
+}
+.modify-container {
+    display: none;
+    position: absolute;
+    z-index: 2;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 21px 32px;
+    background-color: #fff;
+    border: 1px solid #aaa;
+    box-shadow: 1px 5px 20px #eaeaea;
+    
+}
+.modify-container table {
+    width: 300px;
+}
+.modify-container table tr {
+    /* background-color: aqua; */
+    height: 45px;
+}
+.modify-container table input {
+    width: 100%;
+    border: 1px solid #eaeaea;
+}
+.submit-btn-container {
+    display: flex;
+    justify-content: end;
+    margin-top: 10px;
+}
+.submit-btn-container > button {
+    margin-left: 10px;
+    width: 55px;
+    height: 28px;
+    line-height: 26px;
+    text-align: center;
+    text-decoration: none;
+    border: 1px solid #aaa;
+    font-size: 12px;
+    cursor: pointer;
+    color: #000;
+}

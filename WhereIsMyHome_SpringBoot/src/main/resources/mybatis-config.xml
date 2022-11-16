@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+	<typeAliases>
+		<typeAlias type="com.ssafy.myHome.model.AptInfoDto" alias="aptInfoDto" />
+		<typeAlias type="com.ssafy.myHome.model.AptSearchDto" alias="aptSearchDto" />
+		<typeAlias type="com.ssafy.myHome.model.AptDealDto" alias="aptDealDto" />
+		<typeAlias type="com.ssafy.myHome.model.NoticeDto" alias="noticeDto" />
+		<typeAlias type="com.ssafy.myHome.model.UserDto" alias="userDto" />
+		<typeAlias type="com.ssafy.myHome.model.SidoGugunCodeDto" alias="sidoGugunCodeDto" />
+	</typeAliases>
+	
+</configuration>

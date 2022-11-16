@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.myHome.model.mapper.AptMapper">
+	
+	<resultMap type="AptInfoDto" id="aptInfoDto">
+		<result column="apartmentName" property="apartmentName" />
+		<result column="dong" property="dong" />
+		<result column="aptCode" property="aptCode" />
+		<result column="area" property="area" />
+		<result column="dealAmount" property="dealAmount" />
+		<result column="lng" property="lng" />
+		<result column="lat" property="lat" />
+		<result column="dealYear" property="dealYear" />
+		<result column="dealMonth" property="dealMonth" />
+		<result column="dealDay" property="dealDay" />
+		<result column="min_deal_amount" property="minDealAmount" />
+		<result column="max_deal_amount" property="maxDealAmount" />
+		<result column="min_area" property="minArea" />
+		<result column="max_area" property="maxArea" />
+	</resultMap>
+	
+	<select id="selectApartByName" parameterType="aptSearchDto" resultMap="aptInfoDto">
+		select no, apartmentName, dong, lng, lat, max_deal_amount, min_deal_amount, max_area, min_area, info.aptCode
+		from houseinfo as info inner join housedeal as deal on info.aptCode = deal.aptCode
+		where apartmentName like concat ('%', #{keyword}, '%') and dongCode like concat(#{regcode}, '%')
+		group by apartmentName limit #{amount}
+	</select>
+
+	<select id="selectApartByDong" parameterType="aptSearchDto" resultMap="aptInfoDto">
+		select no, apartmentName, dong, lng, lat, max_deal_amount, min_deal_amount, max_area, min_area, info.aptCode
+		from houseinfo as info inner join housedeal as deal on info.aptCode = deal.aptCode
+		where dongCode like concat(#{regcode}, '%') 
+		group by apartmentName limit #{amount}
+	</select>
+		
+	<select id="selectApartDetail" parameterType="aptSearchDto" resultType="aptDealDto">
+		select no, dealAmount, dealYear, dealMonth, dealDay, area, floor
+		from housedeal
+		where aptCode = #{aptCode}
+	</select> 
+	
+	<select id="selectSido" resultType="sidoGugunCodeDto">
+		select left(code, 2)code, name
+		from sidocode
+		order by code;
+	</select>
+	
+	<select id="selectGugun" parameterType="string" resultType="sidoGugunCodeDto">
+		select left(code, 5)code, name
+		from guguncode
+		where left(code, 2) = #{code}
+		and name is not null
+		order by code
+	</select>
+	
+	<select id="selectDong" parameterType="string" resultType="sidoGugunCodeDto">
+		select distinct code, name
+		from dongcode
+		where left(code, 5) = #{code}
+		and name is not null
+		order by code;
+	</select>
+	
+</mapper>
