@@ -24,7 +24,7 @@
 	
 	<update id="updateNotice" parameterType="noticeDto">
 		update notice
-		set title = #{title}, content = #{content}
+		set title = #{title}, content = #{content}, reg_date = now()
 		where no = #{no}
 	</update>
 	
