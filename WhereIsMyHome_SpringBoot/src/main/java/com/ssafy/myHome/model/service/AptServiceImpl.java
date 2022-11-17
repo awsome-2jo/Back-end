@@ -21,13 +21,13 @@ public class AptServiceImpl implements AptService {
 	}
 
 	@Override
-	public List<AptInfoDto> selectApartByDong(AptSearchDto aptSearch) throws Exception {
-		return aptMapper.selectApartByDong(aptSearch);
+	public List<AptInfoDto> selectApart(AptSearchDto aptSearch) throws Exception {
+		return aptMapper.selectApart(aptSearch);
 	}
 
 	@Override
-	public List<AptInfoDto> selectApartByName(AptSearchDto aptSearch) throws Exception {
-		return aptMapper.selectApartByName(aptSearch);
+	public List<AptInfoDto> countApart(AptSearchDto aptSearch) throws Exception {
+		return aptMapper.countApart(aptSearch);
 	}
 
 	@Override
@@ -48,6 +48,11 @@ public class AptServiceImpl implements AptService {
 	@Override
 	public List<SidoGugunCodeDto> getDong(String code) throws Exception {
 		return aptMapper.selectDong(code);
+	}
+
+	@Override
+	public AptInfoDto selectApartByAptCode(String aptCode) throws Exception {
+		return aptMapper.selectApartByAptCode(aptCode);
 	}
 
 }

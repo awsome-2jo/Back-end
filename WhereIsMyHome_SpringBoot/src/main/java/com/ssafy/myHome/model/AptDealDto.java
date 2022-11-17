@@ -27,4 +27,7 @@ public class AptDealDto {
 	
 	@ApiModelProperty(value = "층수")
 	private String floor;		  
+
+	@ApiModelProperty(value = "거래 취소 여부")
+	private String cancelDealType;
 }

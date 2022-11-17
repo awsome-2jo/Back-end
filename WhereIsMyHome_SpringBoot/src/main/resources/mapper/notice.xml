@@ -5,7 +5,7 @@
 	
 	<insert id="insertNotice" parameterType="noticeDto" useGeneratedKeys="true" keyProperty="no">
 		insert into notice ( title, regDate, hit, content )
-		values( #{title}, now(), 0, #{content})
+		values(#{title}, now(), 0, #{content})
 	</insert>
 	
 	<delete id="deleteNotice" parameterType="int">
@@ -20,7 +20,7 @@
 		where no = #{no}
 	</update>
 	
-	<select id="selectNoticeByNo" parameterType="int" resultMap="noticeDto">
+	<select id="selectNoticeByNo" parameterType="int" resultType="noticeDto">
 		select no, title, regDate, hit, content
 		from notice
 		where no = #{no}
@@ -32,7 +32,7 @@
 		where no = #{no}
 	</update>
 	
-	<select id="selectNoticeList" resultMap="noticeDto">
+	<select id="selectNoticeList" resultType="noticeDto">
 		select no, title, regDate, hit
 		from notice
 		order by reg_date desc, no desc

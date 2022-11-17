@@ -28,24 +28,12 @@ public class AptInfoDto {
 	@ApiModelProperty(value = "건축년도")
 	private String buildYear;
 	
-	private int minDealAmount;
-	private int maxDealAmount;
+	private String dealAmount;
+	private String area;
 	
-	private int minArea;
-	private int maxArea;
-
-//	@ApiModelProperty(value = "면적")
-//	private String area;		  
-//	
-//	@ApiModelProperty(value = "매매 가격")
-//	private String dealAmount;
-//
-//	@ApiModelProperty(value = "거래 년도")
-//	private int dealYear;		
-//	
-//	@ApiModelProperty(value = "거래 월")
-//	private int dealMonth;
-//	
-//	@ApiModelProperty(value = "거래 일")
-//	private int dealDay;
+	private double minDealAmount;
+	private double maxDealAmount;
+	
+	private double minArea;
+	private double maxArea;
 }

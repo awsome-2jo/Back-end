@@ -8,10 +8,11 @@ import com.ssafy.myHome.model.AptSearchDto;
 import com.ssafy.myHome.model.SidoGugunCodeDto;
 
 public interface AptService {
-	List<AptInfoDto> selectApartByDong(AptSearchDto aptSearch) throws Exception;
-	List<AptInfoDto> selectApartByName(AptSearchDto aptSearch) throws Exception;
+	List<AptInfoDto> selectApart(AptSearchDto aptSearch) throws Exception;
 	List<AptDealDto> selectApartDetail(String aptCode) throws Exception;
+	List<AptInfoDto> countApart(AptSearchDto aptSearch) throws Exception;
 	List<SidoGugunCodeDto> getSido() throws Exception;
 	List<SidoGugunCodeDto> getGugun(String code) throws Exception;
 	List<SidoGugunCodeDto> getDong(String code) throws Exception;
+	AptInfoDto selectApartByAptCode(String aptCode) throws Exception;
 }

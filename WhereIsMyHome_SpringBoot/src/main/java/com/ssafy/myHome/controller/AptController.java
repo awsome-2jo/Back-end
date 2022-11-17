@@ -49,21 +49,44 @@ public class AptController {
 		return new ResponseEntity<List<SidoGugunCodeDto>>(aptService.getDong(code), HttpStatus.OK);
 	}
 	
-	@Operation(summary = "아파트 목록", description = "지역코드(regcode), 검색 양(amount)(+ 검색어)를 보내면 해당하는 아파트 목록을 반환한다.")
+	@Operation(summary = "아파트 목록", description = "지역코드(regcode), 검색 양(amount)(+ 추가옵션)을 보내면 해당하는 아파트 목록을 반환한다.")
 	@GetMapping("/list")
-	public ResponseEntity<?> listAptByLoca(AptSearchDto aptSearch) {
+	public ResponseEntity<?> listApt(AptSearchDto aptSearch) {
 		try {
 			List<AptInfoDto> list;
+			list = aptService.selectApart(aptSearch);
 			
-			if (aptSearch.getKeyword() != null) {
-				list = aptService.selectApartByName(aptSearch);
-			}
-			else { 
-				list = aptService.selectApartByDong(aptSearch);
-			}
-
 			if (list != null && !list.isEmpty()) {
 				return new ResponseEntity<List<AptInfoDto>>(list, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>("Error : " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	// 수정해야됌
+	@Operation(summary = "아파트 목록 개수", description = "지역코드(regcode)(+검색어)를 보내면 해당하는 지역의 아파트 개수(count), dealAvg(평균 거래랑), priceAvg(평균 실거래가)를 반환한다.")
+	@GetMapping("/list/count")
+	public ResponseEntity<?> listAptCount(AptSearchDto aptSearch) {
+		try {
+			List<AptInfoDto> list;
+			list = aptService.countApart(aptSearch);
+			
+			if (list != null && !list.isEmpty()) {
+				Map<String, Object> res = new HashMap<>();
+				int count = list.size();
+				float sum = 0, avg = 0;
+				for (int i = 0; i < count; i++) {
+					sum += Float.parseFloat(list.get(i).getDealAmount().replaceAll(",",""));
+				}
+				avg = sum / count;
+				res.put("priceAvg", avg);
+				res.put("count", count);
+				
+				return new ResponseEntity<Map<String, Object>>(res, HttpStatus.OK);
 			} else {
 				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 			}
@@ -78,20 +101,17 @@ public class AptController {
 	public ResponseEntity<?> detailApt(@RequestParam String aptCode) {
 		try {
 			List<AptDealDto> list = aptService.selectApartDetail(aptCode);
+			AptInfoDto aptInfo = aptService.selectApartByAptCode(aptCode);
 			
-			if (list != null && !list.isEmpty()) {
-				int size = list.size();
-				float sum = 0, avg = 0;
+			if (list != null && !list.isEmpty() && aptInfo != null) {
 				Map<String, Object> res = new HashMap<>();
-				
-				for (int i = 0; i < size; i++) {
-					sum += Float.parseFloat(list.get(i).getDealAmount().replaceAll(",", ""));
-				}
-				avg = sum / list.size();
-				
+				res.put("buildYear", aptInfo.getBuildYear());
+				res.put("roadName", aptInfo.getRoadName());
+				res.put("jibun", aptInfo.getJibun());
+				res.put("apartmentName", aptInfo.getApartmentName());
+				res.put("lng", aptInfo.getLng());
+				res.put("lat", aptInfo.getLat());
 				res.put("list", list);
-				res.put("avg", avg);
-				res.put("count", size);
 				
 				return new ResponseEntity<Map<String, Object>>(res, HttpStatus.OK);
 			} else {
