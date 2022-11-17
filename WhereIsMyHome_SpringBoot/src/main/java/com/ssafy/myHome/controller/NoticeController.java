@@ -32,7 +32,7 @@ public class NoticeController {
 	@Autowired
 	private NoticeService noticeService;
 	
-	@Operation(summary = "공지사항 목록", description = "공지사항 정보를 반환한다.")
+	@Operation(summary = "공지사항 목록", description = "공지사항 목록을 반환한다.")
 	@GetMapping("/list")
 	public ResponseEntity<?> list() {
 		List<NoticeDto> list;
@@ -45,9 +45,9 @@ public class NoticeController {
 		}
 	}
 	
-	@Operation(summary = "공지사항 상세정보", description = "공지사항 상세정보를 반환한다.")
+	@Operation(summary = "공지사항 상세정보", description = "공지사항 상세정보를 불러온다.")
 	@GetMapping("/detail")
-	public ResponseEntity<?> detail(@RequestParam("no") int no) {
+	public ResponseEntity<?> detail(@RequestParam int no) {
 		try {
 			noticeService.countHitByNo(no);
 			NoticeDto notice = noticeService.searchNoticeByNo(no);
@@ -58,7 +58,7 @@ public class NoticeController {
 		}
 	}
 	
-	@Operation(summary = "공지사항 수정", description = "공지사항을 수정한다.")
+	@Operation(summary = "공지사항 수정", description = "토큰 유효성 검사 후 글을 삭제할 권한(관리자 혹은 작성자)이 있으면 공지사항을 수정한다.")
 	@PutMapping("/modify")
 	public ResponseEntity<?> modify(@RequestBody NoticeDto notice) {
 		try {
@@ -70,7 +70,7 @@ public class NoticeController {
 		}		
 	}
 	
-	@Operation(summary = "공지사항 추가", description = "공지사항을 추가한다.")
+	@Operation(summary = "공지사항 추가", description = "공지사항을 새로운 게시글을 추가한다.")
 	@PostMapping("/add")
 	public ResponseEntity<?> add(@RequestBody NoticeDto notice) {
 		try {
@@ -82,7 +82,7 @@ public class NoticeController {
 		}
 	}
 	
-	@Operation(summary = "공지사항 삭제", description = "공지사항 글을 삭제한다.")
+	@Operation(summary = "공지사항 삭제", description = "토큰 유효성 검사 후 글을 삭제할 권한(관리자 혹은 작성자)이 있으면 공지사항을 삭제한다.")
 	@DeleteMapping("/delete")
 	public ResponseEntity<?> delete(@RequestBody UserDto loginUser, @RequestParam int no) {
 		if(loginUser.getId().equals("admin")) {

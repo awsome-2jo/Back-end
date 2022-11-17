@@ -10,7 +10,7 @@ update houseinfo a, (select a.aptCode,
    set a.max_deal_amount = b.max_deal_amount,
        a.min_deal_amount = b.min_deal_amount,
        a.max_area = b.max_area,
-       a.min_area = b.max_area
+       a.min_area = b.min_area
  where a.aptCode = b.aptCode
    and a.min_area is null;
    

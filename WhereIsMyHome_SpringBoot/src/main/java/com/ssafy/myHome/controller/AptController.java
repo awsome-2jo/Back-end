@@ -75,9 +75,9 @@ public class AptController {
 	
 	@Operation(summary = "아파트 상세정보", description = "아파트 코드(aptCode)를 보내면 해당 아파트의 상세정보를 반환한다.")
 	@GetMapping("/detail")
-	public ResponseEntity<?> detailApt(AptSearchDto aptSearch) {
+	public ResponseEntity<?> detailApt(@RequestParam String aptCode) {
 		try {
-			List<AptDealDto> list = aptService.selectApartDetail(aptSearch);
+			List<AptDealDto> list = aptService.selectApartDetail(aptCode);
 			
 			if (list != null && !list.isEmpty()) {
 				int size = list.size();
@@ -86,10 +86,6 @@ public class AptController {
 				
 				for (int i = 0; i < size; i++) {
 					sum += Float.parseFloat(list.get(i).getDealAmount().replaceAll(",", ""));
-					if (list.get(i).getNo().equals(aptSearch.getNo())) {
-						System.out.println(aptSearch.getNo());
-						res.put("aptDetail", list.get(i));
-					}
 				}
 				avg = sum / list.size();
 				

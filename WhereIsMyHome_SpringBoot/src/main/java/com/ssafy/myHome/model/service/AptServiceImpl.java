@@ -31,8 +31,8 @@ public class AptServiceImpl implements AptService {
 	}
 
 	@Override
-	public List<AptDealDto> selectApartDetail(AptSearchDto aptSearch) throws Exception {
-		return aptMapper.selectApartDetail(aptSearch);
+	public List<AptDealDto> selectApartDetail(String aptCode) throws Exception {
+		return aptMapper.selectApartDetail(aptCode);
 	}
 
 	@Override

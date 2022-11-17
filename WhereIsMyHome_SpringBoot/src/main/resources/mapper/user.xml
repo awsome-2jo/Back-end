@@ -14,7 +14,7 @@
 		values (#{id}, #{pass}, #{email}, #{name}, #{phone})
 	</insert>
 	
-	<delete id="deleteUser" parameterType="userDto">
+	<delete id="deleteUser" parameterType="string">
 		delete from user
 		where id = #{id}
 	</delete>

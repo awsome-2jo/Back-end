@@ -12,41 +12,63 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/news")
-@Api("News 컨트롤러 Api")
-public class NewsController {
+@RequestMapping("/naver")
+@Api("Naver 컨트롤러 Api")
+public class NaverController {
 	
-	@GetMapping(produces = "text/plain;charset=UTF-8")
-    public String getArticles() throws Exception {        
+	@GetMapping(value="/news", produces = "text/plain;charset=UTF-8")
+	public ResponseEntity<?> getNews(
+										@RequestParam(required=false, defaultValue="") String query, 
+										@RequestParam(required=false, defaultValue="10") Integer display, 
+										@RequestParam(required=false, defaultValue="1") Integer start, 
+										@RequestParam(required=false, defaultValue="sim") String sort
+		) throws Exception {
+		String kind = "news.json?";
+		return getArticles(kind, "부동산 " + query, display, start, sort);
+	}
+	
+	@GetMapping(value="/blog", produces = "text/plain;charset=UTF-8")
+	public ResponseEntity<?> getBlog(
+										@RequestParam(required=false, defaultValue="") String query, 
+										@RequestParam(required=false, defaultValue="10") Integer display, 
+										@RequestParam(required=false, defaultValue="1") Integer start, 
+										@RequestParam(required=false, defaultValue="sim") String sort
+		) throws Exception {
+		String kind = "blog.json?";
+		return getArticles(kind, "부동산 " + query, display, start, sort);
+	}
+
+    public ResponseEntity<?> getArticles(String kind, String query, Integer display, Integer start, String sort) throws Exception {        
         String clientId = "erff13rBEZnSA5y3uKYt"; //애플리케이션 클라이언트 아이디
         String clientSecret = "QGz0PHnbn5"; 	  //애플리케이션 클라이언트 시크릿
 
-        String text = null;
         try {
         	// 검색어
-            text = URLEncoder.encode("부동산 실거래", "UTF-8");
+            query = URLEncoder.encode(query, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("검색어 인코딩 실패",e);
         }
-
-
-        String apiURL = "https://openapi.naver.com/v1/search/news.json?query=" + text+"&display=10";    // JSON 결과
+        
+        String apiURL = "https://openapi.naver.com/v1/search/" + kind + "query=" + query + "&display=" + display + "&start=" + start + "&sort=" + sort;    // JSON 결과
 
         Map<String, String> requestHeaders = new HashMap<>();
         requestHeaders.put("X-Naver-Client-Id", clientId);
         requestHeaders.put("X-Naver-Client-Secret", clientSecret);
-        String responseBody = get(apiURL,requestHeaders);
+        String responseBody = get(apiURL, requestHeaders);
         
-        return responseBody;
+        return new ResponseEntity<String>(responseBody, HttpStatus.OK);
     }
 
     private static String get(String apiUrl, Map<String, String> requestHeaders){
