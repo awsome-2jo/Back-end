@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -18,13 +19,23 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.Getter;
+import lombok.Setter;
 
 @Service
 public class JwtServiceImpl implements JwtService {
-
+	
+	private static JwtService instance = new JwtServiceImpl();
+	
+	private JwtServiceImpl() {}
+	
+	public static JwtService getInstance() {
+		return instance;
+	}
+	
 	public static final Logger logger = LoggerFactory.getLogger(JwtServiceImpl.class);
 
-	private static final String SALT = "ssafySecret";
+	private static final String SALT = "SSAFY";
 	private static final int EXPIRE_MINUTES = 60;
 
 	@Override
@@ -57,14 +68,8 @@ public class JwtServiceImpl implements JwtService {
 			Jws<Claims> claims = Jwts.parser().setSigningKey(this.generateKey()).parseClaimsJws(jwt);
 			return true;
 		} catch (Exception e) {
-//			if (logger.isInfoEnabled()) {
-//				e.printStackTrace();
-//			} else {
-				logger.error(e.getMessage());
-//			}
+			logger.error(e.getMessage());
 			throw new UnAuthorizedException();
-//			개발환경
-//			return false;
 		}
 	}
 
@@ -77,16 +82,8 @@ public class JwtServiceImpl implements JwtService {
 		try {
 			claims = Jwts.parser().setSigningKey(SALT.getBytes("UTF-8")).parseClaimsJws(jwt);
 		} catch (Exception e) {
-//			if (logger.isInfoEnabled()) {
-//				e.printStackTrace();
-//			} else {
-				logger.error(e.getMessage());
-//			}
+			logger.error(e.getMessage());
 			throw new UnAuthorizedException();
-//			개발환경
-//			Map<String,Object> testMap = new HashMap<>();
-//			testMap.put("userid", userid);
-//			return testMap;
 		}
 		Map<String, Object> value = claims.getBody();
 		logger.info("value : {}", value);

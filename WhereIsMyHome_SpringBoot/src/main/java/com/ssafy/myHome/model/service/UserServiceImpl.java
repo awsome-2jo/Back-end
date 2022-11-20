@@ -22,8 +22,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void removeUser(UserDto user) throws Exception {
-		userMapper.deleteUser(user);
+	public void removeUser(String id) throws Exception {
+		userMapper.deleteUser(id);
 	}
 
 	@Override
@@ -42,19 +42,23 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean checkUserById(UserDto user, String pass) throws Exception {
-		String pw = userMapper.checkUserById(user);
-		return pw.equals(pass);
+	public String findUserId(UserDto user) throws Exception {
+		return userMapper.findUserId(user);
 	}
 
 	@Override
-	public UserDto searchUser(UserDto user) throws Exception {
-		return userMapper.selectUser(user);
+	public UserDto searchUser(String id) throws Exception {
+		return userMapper.selectUser(id);
 	}
 
 	@Override
 	public UserDto loginUser(UserDto user) throws Exception {
 		return userMapper.selectUserInfo(user);
+	}
+
+	@Override
+	public int duplicateUser(String id) throws Exception {
+		return userMapper.duplecateUser(id);
 	}
 
 }

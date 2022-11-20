@@ -2,16 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ssafy.myHome.model.mapper.UserMapper">
-	
+	<!-- 로그인 시 -->	
 	<select id="selectUserInfo" parameterType="userDto" resultType="userDto">
-		select id, pass, email, name, phone, age, gender
+		select id, name, preferOrder1, preferOrder2, preferRegArr, preferAptArr, state
 		from user
 		where id = #{id} and pass = #{pass}
 	</select>
 	
+	<!-- 회원정보 확인 시 -->
+	<select id="selectUser" parameterType="string" resultType="userDto">
+		select id, email, name, phone, age, gender, preferOrder1, preferOrder2, preferRegArr, preferAptArr, state
+		from user
+		where id = #{id}
+	</select>
+	
 	<insert id="insertUser" parameterType="userDto">
-		insert into User (id, pass, email, name, phone)
-		values (#{id}, #{pass}, #{email}, #{name}, #{phone})
+		insert into User (id, pass, email, name, phone, gender, age, preferOrder1, preferOrder2)
+		values (#{id}, #{pass}, #{email}, #{name}, #{phone}, #{gender}, #{age}, #{preferOrder1}, #{preferOrder2})
 	</insert>
 	
 	<delete id="deleteUser" parameterType="string">
@@ -22,6 +29,26 @@
 	<update id="updateUser" parameterType="userDto">
 		update user
 		set pass = #{pass}, email = #{email}, name = #{name}, phone = #{phone}
+		<trim prefix=",">
+			<if test="gender != null and gender != ''">
+				gender = #{gender}
+			</if>
+			<if test="age != null and age != ''">
+				age = #{age}
+			</if>
+			<if test="preferOrder1 != null and preferOrder1 != ''">
+				preferOrder1 = #{preferOrder1}
+			</if>
+			<if test="preferOrder2 != null and preferOrder2 != ''">
+				preferOrder2 = #{preferOrder2}
+			</if>
+			<if test="preferRegArr != null and preferRegArr != ''">
+				preferRegArr = #{preferRegArr}
+			</if>
+			<if test="preferAptArr != null and preferAptArr != ''">
+				preferAptArr = #{preferAptArr}
+			</if>
+		</trim>
 		where id = #{id}
 	</update>
 	
@@ -31,10 +58,10 @@
 		where id = #{id} and email = #{email} and name = #{name}
 	</update>
 	
-	<select id="checkUserById" parameterType="userDto" resultType="userDto">
+	<select id="findUserId" parameterType="userDto" resultType="string">
 		select id
 		from user
-		where id = #{id} and pass = #{pass}
+		where name = #{name} and email = #{email} and phone = #{phone}
 	</select>
 	
 	<select id="selectUserList" resultType="userDto">
@@ -42,9 +69,10 @@
 		from user
 	</select>
 	
-	<select id="selectUser" parameterType="userDto" resultType="userDto">
-		select id, email, pass, name, phone
+	
+	<select id="duplicateUser" parameterType="string" resultType="int">
+		select count(id)
 		from user
-		where id = #{id} and pass = #{pass}
+		where id = #{id}
 	</select>
 </mapper>

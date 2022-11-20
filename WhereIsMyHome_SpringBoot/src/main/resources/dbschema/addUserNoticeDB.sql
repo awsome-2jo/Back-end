@@ -1,5 +1,5 @@
--- drop table `User`;
--- drop table `notice`;
+drop table `User`;
+drop table `notice`;
 
 CREATE TABLE IF NOT EXISTS `User` (
   `id` VARCHAR(20) NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS `User` (
   `name` VARCHAR(40) NOT NULL,
   `email` VARCHAR(40) NOT NULL,
   `gender` int default 0,
-  `age` VARCHAR(30) default 0,
+  `age` int default 0,
   `phone` VARCHAR(30) NOT NULL,
   `preferOrder1` VARCHAR(30),
   `preferOrder2` VARCHAR(30),
@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS `Notice` (
   `regDate` VARCHAR(30) NOT NULL,
   `hit` INT default 0 NOT NULL,
   `content` VARCHAR(1000) NOT NULL,
+  `type` INT,
   PRIMARY KEY (`no`))
 ENGINE = InnoDB;
 
@@ -36,21 +37,37 @@ INSERT INTO `user` VALUES
 ('ssafy5','ssafy', '최싸피', 'ssafy@ssafy.com', 0, 0, '010-000-0000', '', '', '', '', 0),
 ('ssafy6','ssafy', '정싸피', 'ssafy@ssafy.com', 0, 0, '010-000-0000', '', '', '', '', 0);
 
+
 insert into user (id, pass, name, email, phone)
 values ('ssafy8', 'ssafy', '인증안한싸피', 'ssafy@ssafy.com', '010-0000-0000');
 
 select *
 from user;
 
-insert into notice (title, author, regDate, content)
-values ('공지사항입니다.', '관리자', now(), '내용입니다.'),
-('공지사항 테스트', '관리자', now(), '내용 테스트'),
-('공지사항 테스트2', '관리자', now(), '내용 테스트2'),
-('공지사항 테스트3', '관리자', now(), '내용 테스트3'),
-('공지사항 테스트4', '관리자', now(), '내용 테스트4'),
-('공지사항 테스트5', '관리자', now(), '내용 테스트5'),
-('공지사항 테스트6', '관리자', now(), '내용 테스트6'),
-('공지사항 테스트7', '관리자', now(), '내용 테스트7');
+select count(id)
+from user
+where id = "ssafy10";
 
-select *
-from notice;
+update notice
+set type = 0
+where type is null;
+
+insert into notice (title, author, regDate, content, type)
+values ('공지사항입니다.', '관리자', now(), '내용입니다.', 0),
+('공지사항 테스트', '관리자', now(), '내용 테스트', 0),
+('공지사항 테스트2', '관리자', now(), '내용 테스트2', 0),
+('공지사항 테스트3', '관리자', now(), '내용 테스트3', 0),
+('공지사항 테스트4', '관리자', now(), '내용 테스트4', 0),
+('공지사항 테스트5', '관리자', now(), '내용 테스트5', 0),
+('공지사항 테스트6', '관리자', now(), '내용 테스트6', 0),
+('공지사항 테스트7', '관리자', now(), '내용 테스트7', 0);
+
+insert into notice (title, author, regDate, content, type)
+values ('!!공지사항입니다!!', '관리자', now(), '내용입니다.', 1),
+('!!공지사항 테스트!!', '관리자', now(), '내용 테스트', 1),
+('!!공지사항 테스트!!', '관리자', now(), '내용 테스트2', 1),
+('공지사항 테스트', '관리자', now(), '내용 테스트3', 0),
+('공지사항 테스트', '관리자', now(), '내용 테스트4', 0),
+('공지사항 테스트', '관리자', now(), '내용 테스트5', 0),
+('공지사항 테스트', '관리자', now(), '내용 테스트6', 0),
+('공지사항 테스트', '관리자', now(), '내용 테스트7', 0);

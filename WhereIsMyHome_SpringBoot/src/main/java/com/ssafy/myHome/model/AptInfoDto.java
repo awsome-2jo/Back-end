@@ -16,8 +16,8 @@ public class AptInfoDto {
 	@ApiModelProperty(value = "도로명주소")
 	private String roadName;		
 	
-	@ApiModelProperty(value = "지번")
-	private String jibun;		
+	@ApiModelProperty(value = "도로명주소 + 본번")
+	private String roadNameBonbun;		
 
 	@ApiModelProperty(value = "위도")
 	private String lat;		

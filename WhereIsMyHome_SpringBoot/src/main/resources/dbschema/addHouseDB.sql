@@ -14,3 +14,16 @@ update houseinfo a, (select a.aptCode,
  where a.aptCode = b.aptCode
    and a.min_area is null;
    
+   
+create table housedeal_2021
+select *
+from housedeal 
+where dealYear = 2021;
+
+insert into housedeal_stats (dealYear, aptCode, maxdealmount, mindealmount, maxarea, minarea)
+select dealYear, aptCode, max(cast(replace(dealAmount, ',', '') as unsigned)) as maxdealmount, 
+min(cast(replace(dealAmount, ',', '') as unsigned)) as mindealmount,
+max(cast(area as float)) as maxarea,
+min(cast(area as float)) as minarea
+from housedeal_2020
+group by aptCode;

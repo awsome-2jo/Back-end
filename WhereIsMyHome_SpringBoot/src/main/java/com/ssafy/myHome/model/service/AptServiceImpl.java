@@ -26,7 +26,7 @@ public class AptServiceImpl implements AptService {
 	}
 
 	@Override
-	public List<AptInfoDto> countApart(AptSearchDto aptSearch) throws Exception {
+	public int countApart(AptSearchDto aptSearch) throws Exception {
 		return aptMapper.countApart(aptSearch);
 	}
 

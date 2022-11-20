@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.Operation;
 
 @CrossOrigin("*")
 @RestController
@@ -28,6 +29,7 @@ import io.swagger.annotations.Api;
 @Api("Naver 컨트롤러 Api")
 public class NaverController {
 	
+	@Operation(summary = "뉴스기사 받아오기", description = "(필수X) query(검색어, 기본으로 앞에 '부동산' 붙음), display(표시개수), start(시작점), sort(정렬기준) -> json 형태로 반환")
 	@GetMapping(value="/news", produces = "text/plain;charset=UTF-8")
 	public ResponseEntity<?> getNews(
 										@RequestParam(required=false, defaultValue="") String query, 
@@ -39,6 +41,7 @@ public class NaverController {
 		return getArticles(kind, "부동산 " + query, display, start, sort);
 	}
 	
+	@Operation(summary = "블로그 포스팅 받아오기", description = "(필수X) query(검색어, 기본으로 앞에 '부동산' 붙음), display(표시개수), start(시작점), sort(정렬기준) -> json 형태로 반환")
 	@GetMapping(value="/blog", produces = "text/plain;charset=UTF-8")
 	public ResponseEntity<?> getBlog(
 										@RequestParam(required=false, defaultValue="") String query, 

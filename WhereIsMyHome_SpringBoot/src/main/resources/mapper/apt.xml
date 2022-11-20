@@ -4,9 +4,9 @@
 <mapper namespace="com.ssafy.myHome.model.mapper.AptMapper">
 
 	<select id="selectApart" parameterType="aptSearchDto" resultType="aptInfoDto">
-		select info.aptCode, apartmentName, roadName, jibun, lng, lat, buildYear, dealAmount, cast(area as float) as area
+		select info.aptCode, apartmentName, roadName, roadNameBonbun, lng, lat, buildYear, dealAmount, cast(area as float) as area
 		from houseinfo as info inner join housedeal as deal on info.aptCode = deal.aptCode
-		where apartmentName like concat ('%', #{keyword}, '%') 
+		where apartmentName like concat('%', #{keyword}, '%') 
         and dongCode like concat(#{regcode}, '%')
         and cast(replace(dealAmount, ',', '') as unsigned) &gt;= #{mindeal}
         and cast(replace(dealAmount, ',', '') as unsigned) &lt;= #{maxdeal}
@@ -16,18 +16,17 @@
 		group by aptCode limit 10 offset #{start}
 	</select>
 	
-	<select id="countApart" parameterType="aptSearchDto" resultType="aptInfoDto">
-		select dealAmount
-		from houseinfo as info inner join housedeal as deal on info.aptCode = deal.aptCode
-		where apartmentName like concat ('%', #{keyword}, '%') 
-        and dongCode like concat(#{regcode}, '%')
-        and dealYear &gt;= 2020;
+	<select id="countApart" parameterType="aptSearchDto" resultType="int">
+		select count(aptCode)
+		from houseinfo
+		where dongCode like concat(#{regcode}, '%')
+		and apartmentName like concat('%', #{keyword}, '%')
 	</select>
 	
 	<select id="selectApartByAptCode" parameterType="String" resultType="aptInfoDto">
-		select buildYear, roadName, jibun, apartmentName, lng, lat
+		select buildYear, roadName, roadNameBonbun, apartmentName, lng, lat
 		from houseinfo
-		where aptCode = #{aptCode};
+		where aptCode = #{aptCode}
 	</select>
 	
 	<select id="selectApartDetail" parameterType="String" resultType="aptDealDto">

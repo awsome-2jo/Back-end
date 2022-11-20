@@ -4,8 +4,8 @@
 <mapper namespace="com.ssafy.myHome.model.mapper.NoticeMapper">
 	
 	<insert id="insertNotice" parameterType="noticeDto" useGeneratedKeys="true" keyProperty="no">
-		insert into notice ( title, regDate, hit, content )
-		values(#{title}, now(), 0, #{content})
+		insert into notice ( title, author, regDate, hit, content )
+		values(#{title}, "관리자", now(), 0, #{content})
 	</insert>
 	
 	<delete id="deleteNotice" parameterType="int">
@@ -13,15 +13,14 @@
 		where no = #{no}
 	</delete>
 	
-	
 	<update id="updateNotice" parameterType="noticeDto">
 		update notice
-		set title = #{title}, content = #{content}, regDate = now()
+		set title = #{title}, content = #{content}
 		where no = #{no}
 	</update>
 	
 	<select id="selectNoticeByNo" parameterType="int" resultType="noticeDto">
-		select no, title, regDate, hit, content
+		select no, title, author, regDate, hit, content, type
 		from notice
 		where no = #{no}
 	</select>
@@ -32,9 +31,27 @@
 		where no = #{no}
 	</update>
 	
-	<select id="selectNoticeList" resultType="noticeDto">
-		select no, title, regDate, hit
+	<select id="selectNoticeList" parameterType="noticeParameterDto" resultType="noticeDto">
+		select no, title, author, regDate, content, hit, type
 		from notice
-		order by reg_date desc, no desc
+		<trim prefix="where" prefixOverrides="and |or">
+			<if test="type == 1">
+				type = #{type}
+			</if>
+			<if test="keyword != null and keyword != ''">
+				${key} like concat('%', #{keyword}, '%') 
+			</if>
+		</trim>
+		order by regDate desc, no asc
+		limit #{start}, #{amount}
 	</select>
+	
+	<select id="getTotalCnt" resultType="int">
+		select count(no)
+		from notice
+		<if test="keyword != null and keyword != ''">
+			where ${key} like concat('%', #{keyword}, '%')
+		</if>
+	</select>
+	
 </mapper>

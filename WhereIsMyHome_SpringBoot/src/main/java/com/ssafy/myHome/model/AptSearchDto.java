@@ -7,8 +7,8 @@ import lombok.Data;
 @ApiModel(value = "AptSearchDto : 아파트 검색 시 필요한 정보", description = "아파트 거래 번호, 검색어, 지역 코드, 아파트 코드, 검색량")
 @Data
 public class AptSearchDto {
-	@ApiModelProperty(value = "지역 코드", required = true, example = "11110")
-	private String regcode;
+	@ApiModelProperty(value = "지역 코드", example = "11110")
+	private String regcode = "";
 
 	@ApiModelProperty(value = "검색량", example = "10")
 	private int amount;

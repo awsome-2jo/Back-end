@@ -23,7 +23,7 @@ public class UserDto {
 	private int gender;
 	
 	@ApiModelProperty(value = "나이")
-	private String age;
+	private int age;
 	
 	@ApiModelProperty(value = "폰번호")
 	private String phone;

@@ -9,6 +9,7 @@
 		<typeAlias type="com.ssafy.myHome.model.AptSearchDto" alias="aptSearchDto" />
 		<typeAlias type="com.ssafy.myHome.model.AptDealDto" alias="aptDealDto" />
 		<typeAlias type="com.ssafy.myHome.model.NoticeDto" alias="noticeDto" />
+		<typeAlias type="com.ssafy.myHome.model.NoticeParameterDto" alias="noticeParameterDto" />
 		<typeAlias type="com.ssafy.myHome.model.UserDto" alias="userDto" />
 		<typeAlias type="com.ssafy.myHome.model.SidoGugunCodeDto" alias="sidoGugunCodeDto" />
 	</typeAliases>

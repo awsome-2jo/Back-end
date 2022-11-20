@@ -9,17 +9,19 @@ import com.ssafy.myHome.model.UserDto;
 public interface UserService {
 	int addUser(UserDto user) throws Exception;
 	
-	void removeUser(UserDto user) throws Exception;
+	void removeUser(String id) throws Exception;
 	
 	int modifyUser(UserDto user) throws Exception;
 
 	int modifyPass(UserDto user) throws Exception;
 	
-	boolean checkUserById(UserDto user, String pass) throws Exception;
+	String findUserId(UserDto user) throws Exception;
 
 	List<UserDto> serachUserList() throws Exception;
 
-	UserDto searchUser(UserDto user) throws Exception;
+	UserDto searchUser(String id) throws Exception;
 
 	UserDto loginUser(UserDto user) throws Exception;
+
+	int duplicateUser(String id) throws Exception;
 }
