@@ -20,26 +20,29 @@ public class UserDto {
 	private String email;
 	
 	@ApiModelProperty(value = "성별")
-	private int gender;
+	private int gender = 0;
 	
 	@ApiModelProperty(value = "나이")
-	private int age;
+	private int age = 0;
 	
 	@ApiModelProperty(value = "폰번호")
 	private String phone;
 	
 	@ApiModelProperty(value = "선호 사항1")
-	private String preferOrder1;
+	private String preferOrder1 = "";
 	
 	@ApiModelProperty(value = "선호 사항2")
-	private String preferOrder2;
+	private String preferOrder2 = "";
 	
 	@ApiModelProperty(value = "선호 지역")
-	private String preferRegArr;
+	private String preferRegArr = "";
 	
 	@ApiModelProperty(value = "선호 아파트")
-	private String preferAptArr;
+	private String preferAptArr = "";
 	
 	@ApiModelProperty(value = "인증 여부")
-	private int state;
+	private int state = 0;
+	
+	@ApiModelProperty(value = "인증 키")
+	private String userKey;
 }

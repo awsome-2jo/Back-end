@@ -32,4 +32,6 @@ public interface UserMapper {
 	UserDto selectUserInfo(UserDto user) throws Exception;
 
 	int duplecateUser(String id) throws Exception;
+
+	void certifyUser(String email, String userKey);
 }

@@ -62,9 +62,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void sendEmail(UserDto user, String div) throws Exception {
-		// TODO Auto-generated method stub
-		
+	public void certifyUser(String email, String userKey) {
+		userMapper.certifyUser(email, userKey);
 	}
 
 }

@@ -16,8 +16,6 @@ public interface UserService {
 	String findUserId(UserDto user) throws Exception;
 	
 	int findUserPass(UserDto user) throws Exception;
-	
-	void sendEmail(UserDto user, String div) throws Exception;
 
 	List<UserDto> serachUserList() throws Exception;
 
@@ -26,4 +24,6 @@ public interface UserService {
 	UserDto loginUser(UserDto user) throws Exception;
 
 	int duplicateUser(String id) throws Exception;
+
+	void certifyUser(String email, String userKey);
 }

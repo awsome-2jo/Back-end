@@ -17,8 +17,8 @@
 	</select>
 	
 	<insert id="insertUser" parameterType="userDto">
-		insert into User (id, pass, email, name, phone, gender, age, preferOrder1, preferOrder2)
-		values (#{id}, #{pass}, #{email}, #{name}, #{phone}, #{gender}, #{age}, #{preferOrder1}, #{preferOrder2})
+		insert into User (id, pass, email, name, phone, gender, age, preferOrder1, preferOrder2, userKey)
+		values (#{id}, #{pass}, #{email}, #{name}, #{phone}, #{gender}, #{age}, #{preferOrder1}, #{preferOrder2}, #{userKey})
 	</insert>
 	
 	<delete id="deleteUser" parameterType="string">
@@ -69,10 +69,15 @@
 		from user
 	</select>
 	
-	
 	<select id="duplicateUser" parameterType="string" resultType="int">
 		select count(id)
 		from user
 		where id = #{id}
 	</select>
+	
+	<update id="certifyUser" parameterType="string" >
+		update user
+		set state = 1
+		where email = #{email} and userKey = #{userKey}
+	</update>
 </mapper>

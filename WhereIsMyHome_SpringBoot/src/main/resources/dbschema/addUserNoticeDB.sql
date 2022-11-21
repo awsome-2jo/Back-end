@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS `User` (
   `preferOrder2` VARCHAR(30),
   `preferRegArr` VARCHAR(1000),
   `preferAptArr` VARCHAR(1000),
+  `userKey` VARCHAR(30),
   `state` int default 0,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
@@ -29,20 +30,24 @@ CREATE TABLE IF NOT EXISTS `Notice` (
 ENGINE = InnoDB;
 
 INSERT INTO `user` VALUES 
-('admin','admin', '관리자', 'admin@ssafy.com', 0, 0, '010-000-0000', '', '', '', '', 1),
-('ssafy','ssafy', '싸아피', 'ssafy@ssafy.com', 1, 24, '010-000-0000', '', '', '', '', 1),
-('ssafy2','ssafy', '한싸피', 'ssafy@ssafy.com', 2, 24, '010-000-0000', '', '', '', '', 1),
-('ssafy3','ssafy', '박싸피', 'ssafy@ssafy.com', 2, 0, '010-000-0000', '', '', '', '', 1),
-('ssafy4','ssafy', '김싸피', 'ssafy@ssafy.com', 1, 26, '010-000-0000', '', '', '', '', 1),
-('ssafy5','ssafy', '최싸피', 'ssafy@ssafy.com', 0, 0, '010-000-0000', '', '', '', '', 0),
-('ssafy6','ssafy', '정싸피', 'ssafy@ssafy.com', 0, 0, '010-000-0000', '', '', '', '', 0);
+('admin','admin', '관리자', 'admin@ssafy.com', 0, 0, '010-000-0000', '', '', '', '', '', 1),
+('ssafy','ssafy', '싸아피', 'ssafy@ssafy.com', 1, 24, '010-000-0000', '', '', '', '', '', 1),
+('ssafy2','ssafy', '한싸피', 'ssafy@ssafy.com', 2, 24, '010-000-0000', '', '', '', '', '', 1),
+('ssafy3','ssafy', '박싸피', 'ssafy@ssafy.com', 2, 0, '010-000-0000', '', '', '', '', '', 1),
+('ssafy4','ssafy', '김싸피', 'ssafy@ssafy.com', 1, 26, '010-000-0000', '', '', '', '', '', 1),
+('ssafy5','ssafy', '최싸피', 'ssafy@ssafy.com', 0, 0, '010-000-0000', '', '', '', '', '', 0),
+('ssafy6','ssafy', '정싸피', 'ssafy@ssafy.com', 0, 0, '010-000-0000', '', '', '', '', '', 0);
 
 
 insert into user (id, pass, name, email, phone)
-values ('ssafy8', 'ssafy', '인증안한싸피', 'ssafy@ssafy.com', '010-0000-0000');
+values ('ssafy8', 'ssafy', '인증안한싸피', 'kmj0568@gmail.com', '010-0000-0000');
 
 select *
 from user;
+
+update user
+set state = 0
+where email = "kmj5692@naver.com" and userKey = "ssafy";
 
 select count(id)
 from user
@@ -71,3 +76,19 @@ values ('!!공지사항입니다!!', '관리자', now(), '내용입니다.', 1),
 ('공지사항 테스트', '관리자', now(), '내용 테스트5', 0),
 ('공지사항 테스트', '관리자', now(), '내용 테스트6', 0),
 ('공지사항 테스트', '관리자', now(), '내용 테스트7', 0);
+
+
+select *
+from user;
+
+select no, title, regDate, content, hit, type
+from notice
+where title like concat('%', '공지사항', '%')
+order by no asc, regDate asc
+limit 0, 10;
+
+update user
+set pass = 'ssafy', email = 'ssafy2@sssafy.com', name = '회원변경', phone = '010-0010-1120'
+and gender = 2
+and age = 22
+where id = 'ssafy2'
