@@ -13,9 +13,11 @@ public interface UserService {
 	
 	int modifyUser(UserDto user) throws Exception;
 
-	int modifyPass(UserDto user) throws Exception;
-	
 	String findUserId(UserDto user) throws Exception;
+	
+	int findUserPass(UserDto user) throws Exception;
+	
+	void sendEmail(UserDto user, String div) throws Exception;
 
 	List<UserDto> serachUserList() throws Exception;
 

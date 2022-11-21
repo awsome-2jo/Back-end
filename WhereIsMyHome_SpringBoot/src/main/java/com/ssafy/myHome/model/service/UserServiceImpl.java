@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int modifyPass(UserDto user) throws Exception {
+	public int findUserPass(UserDto user) throws Exception {
 		return userMapper.updatePass(user);
 	}
 
@@ -59,6 +59,12 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int duplicateUser(String id) throws Exception {
 		return userMapper.duplecateUser(id);
+	}
+
+	@Override
+	public void sendEmail(UserDto user, String div) throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
