@@ -11,7 +11,7 @@ public interface NoticeService {
 	
 	void removeNotice(int no) throws Exception;
 	
-	void modifyNotice(NoticeDto notice) throws Exception;
+	int modifyNotice(NoticeDto notice) throws Exception;
 	
 	NoticeDto searchNoticeByNo(int no) throws Exception;
 	

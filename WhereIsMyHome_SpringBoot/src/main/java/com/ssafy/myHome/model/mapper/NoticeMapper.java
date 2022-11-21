@@ -14,7 +14,7 @@ public interface NoticeMapper {
 	
 	void deleteNotice(int no) throws Exception;
 	
-	void updateNotice(NoticeDto notice) throws Exception;
+	int updateNotice(NoticeDto notice) throws Exception;
 	
 	/**
 	 * @describe 공지사항 상세 조회하기

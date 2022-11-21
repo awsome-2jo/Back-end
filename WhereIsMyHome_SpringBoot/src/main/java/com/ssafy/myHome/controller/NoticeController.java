@@ -102,9 +102,11 @@ public class NoticeController {
 				Map<String, Object> map = parseToken(token);
 				if (((String) map.get("userId")).equals("admin")) {
 					noticeService.modifyNotice(notice);
-					return new ResponseEntity<Void>(HttpStatus.OK);
+					return new ResponseEntity<Integer>(notice.getNo() ,HttpStatus.OK);
 				}
 			}
+//			noticeService.modifyNotice(notice);
+//			return new ResponseEntity<Integer>(notice.getNo() ,HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return exceptionHandling(e);
@@ -122,9 +124,15 @@ public class NoticeController {
 				Map<String, Object> map = parseToken(token);
 				if (((String) map.get("userId")).equals("admin")) {
 					noticeService.addNotice(notice);
-					return new ResponseEntity<Void>(HttpStatus.OK);
+					System.out.println(notice.getNo());
+					return new ResponseEntity<Integer>(notice.getNo(), HttpStatus.OK);
 				}
+				
+				System.out.println("여긴 옴?");
 			}
+//			noticeService.addNotice(notice);
+//			return new ResponseEntity<Integer>(notice.getNo(), HttpStatus.OK);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			return exceptionHandling(e);

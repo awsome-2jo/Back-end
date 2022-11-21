@@ -6,6 +6,9 @@
 	<insert id="insertNotice" parameterType="noticeDto" useGeneratedKeys="true" keyProperty="no">
 		insert into notice ( title, author, regDate, hit, content )
 		values(#{title}, "관리자", now(), 0, #{content})
+		<selectKey resultType="int" keyProperty="no" order="AFTER">
+			select LAST_INSERT_ID()
+		</selectKey>
 	</insert>
 	
 	<delete id="deleteNotice" parameterType="int">
@@ -17,6 +20,11 @@
 		update notice
 		set title = #{title}, content = #{content}
 		where no = #{no}
+		<selectKey resultType="int" keyProperty="no" order="AFTER">
+			select no
+			from notice
+			where no = #{no}
+		</selectKey>
 	</update>
 	
 	<select id="selectNoticeByNo" parameterType="int" resultType="noticeDto">

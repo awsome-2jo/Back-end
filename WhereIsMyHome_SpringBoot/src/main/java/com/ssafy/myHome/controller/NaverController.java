@@ -11,10 +11,9 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -75,59 +74,37 @@ public class NaverController {
         requestHeaders.put("X-Naver-Client-Secret", clientSecret);
         
         String responseBody = get(apiURL, requestHeaders);
-//        System.out.println(responseBody);
+        
         //========================================================
         
         JsonParser jsonParser = new BasicJsonParser();
         Map<String, Object> map = jsonParser.parseMap(responseBody);
         
-        ArrayList<Object> list = (ArrayList) map.get("items");
-        List<Map<String, Object>> response = new ArrayList<Map<String,Object>>();
-        Map<String, Object> res = new HashMap<String, Object>();
-        
-        for(int i=0; i<list.size(); i++) {
+        JSONArray arr = new JSONArray();
+        ArrayList list = (ArrayList)(map.get("items"));
+        for (int i = 0; i < list.size(); i++) {
         	Map<String, Object> item = null;
-        	JSONObject json = new JSONObject();
         	
         	if(list.get(i) instanceof String) {
         		item = jsonParser.parseMap((String) list.get(i));
         	} else {
         		item = (Map<String, Object>) list.get(i);
         	}
-        	String originallink = (String) item.get("originallink");
         	
-//        	System.out.println(originallink);
+        	String originallink = (String) item.get("originallink");
         	
         	Document doc = Jsoup.connect(originallink).get();
         	String image = doc.select("meta[property='og:image']").attr("content");
         	item.put("image", image);
-        	
-        	Iterator<String> iter = item.keySet().iterator();
-        	
-        	while (iter.hasNext()) {
-        		String key = iter.next();
-        		String val = (String)item.get(key);
-//        		json.put(key, val);
-        		
-        		System.out.println("key : " + key);
-        		System.out.println("value : " + val);
-        	}
-        	
-//        	System.out.println(json.get("image"));
-        	
-        	
-//        	response.add(item);
-//        	res.put("item_" + i, item);        	
+        	JSONObject jmap = new JSONObject(item);
+        	arr.add(jmap);
         }
         
-//        System.out.println(jsonObj.get("item"));
-        
-        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+        return new ResponseEntity<String>(arr.toString(), HttpStatus.OK);
     }
 
 	private static String get(String apiUrl, Map<String, String> requestHeaders) {
 		HttpURLConnection con = connect(apiUrl);
-		System.out.println(apiUrl);
 		try {
 			con.setRequestMethod("GET");
 			for (Map.Entry<String, String> header : requestHeaders.entrySet()) {

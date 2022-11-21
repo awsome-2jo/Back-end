@@ -24,8 +24,8 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	@Override
-	public void modifyNotice(NoticeDto notice) throws Exception {
-		noticeMapper.updateNotice(notice);
+	public int modifyNotice(NoticeDto notice) throws Exception {
+		return noticeMapper.updateNotice(notice);
 	}
 
 	@Override
