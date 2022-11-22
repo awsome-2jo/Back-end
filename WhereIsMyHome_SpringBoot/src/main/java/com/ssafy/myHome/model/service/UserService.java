@@ -25,5 +25,5 @@ public interface UserService {
 
 	int duplicateUser(String id) throws Exception;
 
-	void certifyUser(String email, String userKey);
+	void certifyUser(String userKey) throws Exception ;
 }

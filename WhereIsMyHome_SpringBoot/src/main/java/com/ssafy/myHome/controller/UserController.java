@@ -57,10 +57,14 @@ public class UserController {
 		Map<String, Object> res = new HashMap<>();
 		try {
 			UserDto loginUser = userService.loginUser(user);
-			if (loginUser == null || loginUser.getState() == 0) {
+			if (loginUser == null) {
 				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 			}
-
+			
+			if (loginUser.getState() == 0) {
+				return new ResponseEntity<Void>(HttpStatus.RESET_CONTENT);
+			}
+			
 			String token = jwtService.create("userId", loginUser.getId(), "access-token");
 
 			res.put("userInfo", loginUser);
@@ -72,11 +76,10 @@ public class UserController {
 	}
 
 	@Operation(summary = "회원가입", description = "id, pass, name, email, phone(+ gender, age, prefer~)정보로 새로운 유저를 생성하여 DB에 저장한다.")
-	@PostMapping("/register")
+	@PostMapping("/regist")
 	public ResponseEntity<?> regist(@RequestBody UserDto user) {
 		try {
 			String userKey = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 10);
-//			String userKey = "ssafy";
 			user.setUserKey(userKey);
 			userService.addUser(user);
 			sendMail(user.getEmail(), userKey, 0);
@@ -88,10 +91,10 @@ public class UserController {
 	
 	
 	@Operation(summary = "이메일인증", description = "회원가입 후 이메일 인증, 해당 요청이 들어오면 회원의 state : 0 -> 1")
-	@GetMapping("/certify")
-	public ResponseEntity<?> registEmail(@RequestParam String email, @RequestParam String userKey) {
+	@GetMapping("/certify/{userKey}")
+	public ResponseEntity<?> registEmail(@PathVariable String userKey) {
 		try {
-			userService.certifyUser(email, userKey);
+			userService.certifyUser(userKey);
 			return new ResponseEntity<Void>(HttpStatus.OK);
 		} catch (Exception e) {
 			return exceptionHandling(e);
@@ -221,7 +224,7 @@ public class UserController {
 		String host = "smtp.naver.com"; // 네이버일 경우 네이버 계정, gmail경우 gmail 계정
 		String user = "homeinpage@naver.com"; // 패스워드
 		String password = "home-in-page";
-
+		
 		// SMTP 서버 정보를 설정한다.
 		Properties props = new Properties();
 		props.put("mail.smtp.host", host);
@@ -238,13 +241,15 @@ public class UserController {
 			MimeMessage message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(user));
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
+			
 
 			if (type == 0) {
 				// 메일 제목
 				message.setSubject("Home:in 회원가입 인증 안내 메일");
 
 				// 메일 내용
-				message.setText("http://localhost:9999/user/certify?email=" + email + "&userKey=" + key + "");
+				message.setContent("<a href=\"http://localhost:8080/confirm/" + key + "\">여기를 눌러주세요</a>", "text/html;charset=euc-kr");
+				
 			} else {
 				// 메일 제목
 				message.setSubject("Home:in 비밀번호 안내 메일");

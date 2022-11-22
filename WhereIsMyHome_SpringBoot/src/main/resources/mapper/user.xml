@@ -78,6 +78,6 @@
 	<update id="certifyUser" parameterType="string" >
 		update user
 		set state = 1
-		where email = #{email} and userKey = #{userKey}
+		where userKey = #{userKey}
 	</update>
 </mapper>

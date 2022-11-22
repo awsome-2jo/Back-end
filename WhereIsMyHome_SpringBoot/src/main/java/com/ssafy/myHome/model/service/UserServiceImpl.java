@@ -62,8 +62,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void certifyUser(String email, String userKey) {
-		userMapper.certifyUser(email, userKey);
+	public void certifyUser(String userKey) throws Exception  {
+		userMapper.certifyUser(userKey);
 	}
 
 }

@@ -33,5 +33,5 @@ public interface UserMapper {
 
 	int duplecateUser(String id) throws Exception;
 
-	void certifyUser(String email, String userKey);
+	void certifyUser(String userKey) throws Exception;
 }

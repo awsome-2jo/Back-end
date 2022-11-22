@@ -93,7 +93,7 @@ public class AptController {
 		try {
 			List<AptInfoDto> list;
 			list = aptService.selectApartByRegcode(aptSearch);
-			System.out.println(list.get(0).getDealAmount());
+			
 			if (list != null && !list.isEmpty()) {
 				Map<String, Object> res = new HashMap<>();
 				int count = list.size();

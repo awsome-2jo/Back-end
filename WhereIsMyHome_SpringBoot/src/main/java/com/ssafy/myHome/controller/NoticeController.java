@@ -120,7 +120,7 @@ public class NoticeController {
 
 	@Operation(summary = "공지사항 추가", description = "공지사항을 새로운 게시글을 추가한다.")
 	@PostMapping("/add")
-	public ResponseEntity<?> add(@RequestBody NoticeDto notice,@RequestParam("upfile") MultipartFile[] files, HttpServletRequest request) {
+	public ResponseEntity<?> add(@RequestBody NoticeDto notice, /* @RequestParam("upfile") MultipartFile[] files, */HttpServletRequest request) {
 		try {
 			String token = request.getHeader("access-token");
 
@@ -129,32 +129,32 @@ public class NoticeController {
 				if (((String) map.get("userId")).equals("admin")) {
 					noticeService.addNotice(notice);
 					
-					if (!files[0].isEmpty()) {
-//						String realPath = servletContext.getRealPath("/upload");
-						String realPath = "/upload";
-//						String realPath = servletContext.getRealPath("/resources/img");
-						String today = new SimpleDateFormat("yyMMdd").format(new Date());
-						String saveFolder = realPath + File.separator + today;
-						File folder = new File(saveFolder);
-						if (!folder.exists())
-							folder.mkdirs();
-						List<FileInfoDto> fileInfos = new ArrayList<FileInfoDto>();
-						for (MultipartFile mfile : files) {
-							FileInfoDto fileInfoDto = new FileInfoDto();
-							String originalFileName = mfile.getOriginalFilename();
-							if (!originalFileName.isEmpty()) {
-								String saveFileName = UUID.randomUUID().toString()
-										+ originalFileName.substring(originalFileName.lastIndexOf('.'));
-								fileInfoDto.setSaveFolder(today);
-								fileInfoDto.setOriginalFile(originalFileName);
-								fileInfoDto.setSaveFile(saveFileName);
-								mfile.transferTo(new File(folder, saveFileName));
-							}
-							fileInfos.add(fileInfoDto);
-						}
-//						boardDto.setFileInfos(fileInfos);
-						
-					}
+//					if (!files[0].isEmpty()) {
+////						String realPath = servletContext.getRealPath("/upload");
+//						String realPath = "/upload";
+////						String realPath = servletContext.getRealPath("/resources/img");
+//						String today = new SimpleDateFormat("yyMMdd").format(new Date());
+//						String saveFolder = realPath + File.separator + today;
+//						File folder = new File(saveFolder);
+//						if (!folder.exists())
+//							folder.mkdirs();
+//						List<FileInfoDto> fileInfos = new ArrayList<FileInfoDto>();
+//						for (MultipartFile mfile : files) {
+//							FileInfoDto fileInfoDto = new FileInfoDto();
+//							String originalFileName = mfile.getOriginalFilename();
+//							if (!originalFileName.isEmpty()) {
+//								String saveFileName = UUID.randomUUID().toString()
+//										+ originalFileName.substring(originalFileName.lastIndexOf('.'));
+//								fileInfoDto.setSaveFolder(today);
+//								fileInfoDto.setOriginalFile(originalFileName);
+//								fileInfoDto.setSaveFile(saveFileName);
+//								mfile.transferTo(new File(folder, saveFileName));
+//							}
+//							fileInfos.add(fileInfoDto);
+//						}
+////						boardDto.setFileInfos(fileInfos);
+//						
+//					}
 					
 					return new ResponseEntity<Integer>(notice.getNo(), HttpStatus.OK);
 				}
