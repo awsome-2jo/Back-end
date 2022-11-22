@@ -1,9 +1,14 @@
 package com.ssafy.myHome.controller;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -22,10 +27,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.ssafy.myHome.model.FileInfoDto;
 import com.ssafy.myHome.model.NoticeDto;
 import com.ssafy.myHome.model.NoticeParameterDto;
-import com.ssafy.myHome.model.UserDto;
 import com.ssafy.myHome.model.service.JwtService;
 import com.ssafy.myHome.model.service.JwtServiceImpl;
 import com.ssafy.myHome.model.service.NoticeService;
@@ -105,8 +111,6 @@ public class NoticeController {
 					return new ResponseEntity<Integer>(notice.getNo() ,HttpStatus.OK);
 				}
 			}
-//			noticeService.modifyNotice(notice);
-//			return new ResponseEntity<Integer>(notice.getNo() ,HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return exceptionHandling(e);
@@ -116,7 +120,7 @@ public class NoticeController {
 
 	@Operation(summary = "공지사항 추가", description = "공지사항을 새로운 게시글을 추가한다.")
 	@PostMapping("/add")
-	public ResponseEntity<?> add(@RequestBody NoticeDto notice, HttpServletRequest request) {
+	public ResponseEntity<?> add(@RequestBody NoticeDto notice,@RequestParam("upfile") MultipartFile[] files, HttpServletRequest request) {
 		try {
 			String token = request.getHeader("access-token");
 
@@ -124,15 +128,37 @@ public class NoticeController {
 				Map<String, Object> map = parseToken(token);
 				if (((String) map.get("userId")).equals("admin")) {
 					noticeService.addNotice(notice);
-					System.out.println(notice.getNo());
+					
+					if (!files[0].isEmpty()) {
+//						String realPath = servletContext.getRealPath("/upload");
+						String realPath = "/upload";
+//						String realPath = servletContext.getRealPath("/resources/img");
+						String today = new SimpleDateFormat("yyMMdd").format(new Date());
+						String saveFolder = realPath + File.separator + today;
+						File folder = new File(saveFolder);
+						if (!folder.exists())
+							folder.mkdirs();
+						List<FileInfoDto> fileInfos = new ArrayList<FileInfoDto>();
+						for (MultipartFile mfile : files) {
+							FileInfoDto fileInfoDto = new FileInfoDto();
+							String originalFileName = mfile.getOriginalFilename();
+							if (!originalFileName.isEmpty()) {
+								String saveFileName = UUID.randomUUID().toString()
+										+ originalFileName.substring(originalFileName.lastIndexOf('.'));
+								fileInfoDto.setSaveFolder(today);
+								fileInfoDto.setOriginalFile(originalFileName);
+								fileInfoDto.setSaveFile(saveFileName);
+								mfile.transferTo(new File(folder, saveFileName));
+							}
+							fileInfos.add(fileInfoDto);
+						}
+//						boardDto.setFileInfos(fileInfos);
+						
+					}
+					
 					return new ResponseEntity<Integer>(notice.getNo(), HttpStatus.OK);
 				}
-				
-				System.out.println("여긴 옴?");
 			}
-//			noticeService.addNotice(notice);
-//			return new ResponseEntity<Integer>(notice.getNo(), HttpStatus.OK);
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			return exceptionHandling(e);

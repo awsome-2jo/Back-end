@@ -15,4 +15,5 @@ public interface AptService {
 	List<SidoGugunCodeDto> getGugun(String code) throws Exception;
 	List<SidoGugunCodeDto> getDong(String code) throws Exception;
 	AptInfoDto selectApartByAptCode(String aptCode) throws Exception;
+	List<AptInfoDto> selectApartByRegcode(AptSearchDto aptSearch) throws Exception;
 }

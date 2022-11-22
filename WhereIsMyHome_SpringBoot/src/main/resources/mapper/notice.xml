@@ -4,8 +4,8 @@
 <mapper namespace="com.ssafy.myHome.model.mapper.NoticeMapper">
 	
 	<insert id="insertNotice" parameterType="noticeDto" useGeneratedKeys="true" keyProperty="no">
-		insert into notice ( title, author, regDate, hit, content )
-		values(#{title}, "관리자", now(), 0, #{content})
+		insert into notice ( title, author, regDate, hit, content, type )
+		values(#{title}, "관리자", now(), 0, #{content}, #{type})
 		<selectKey resultType="int" keyProperty="no" order="AFTER">
 			select LAST_INSERT_ID()
 		</selectKey>
@@ -18,7 +18,7 @@
 	
 	<update id="updateNotice" parameterType="noticeDto">
 		update notice
-		set title = #{title}, content = #{content}
+		set title = #{title}, content = #{content}, type = #{type}
 		where no = #{no}
 		<selectKey resultType="int" keyProperty="no" order="AFTER">
 			select no

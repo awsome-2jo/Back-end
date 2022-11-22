@@ -19,4 +19,5 @@ public interface AptMapper {
 	public List<SidoGugunCodeDto> selectGugun(String code) throws Exception;
 	public List<SidoGugunCodeDto> selectDong(String code) throws Exception;
 	public AptInfoDto selectApartByAptCode(String aptCode) throws Exception;
+	public List<AptInfoDto> selectApartByRegCode(AptSearchDto aptSearch) throws Exception;
 }

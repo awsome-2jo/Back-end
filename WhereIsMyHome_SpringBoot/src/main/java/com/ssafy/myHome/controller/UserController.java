@@ -75,11 +75,11 @@ public class UserController {
 	@PostMapping("/register")
 	public ResponseEntity<?> regist(@RequestBody UserDto user) {
 		try {
-//			String userKey = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 10);
-			String userKey = "ssafy";
+			String userKey = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 10);
+//			String userKey = "ssafy";
 			user.setUserKey(userKey);
 			userService.addUser(user);
-			naverMailSend(user.getEmail(), userKey, 0);
+			sendMail(user.getEmail(), userKey, 0);
 			return new ResponseEntity<Void>(HttpStatus.OK);
 		} catch (Exception e) {
 			return exceptionHandling(e);
@@ -88,7 +88,7 @@ public class UserController {
 	
 	
 	@Operation(summary = "이메일인증", description = "회원가입 후 이메일 인증, 해당 요청이 들어오면 회원의 state : 0 -> 1")
-	@PostMapping("/certify")
+	@GetMapping("/certify")
 	public ResponseEntity<?> registEmail(@RequestParam String email, @RequestParam String userKey) {
 		try {
 			userService.certifyUser(email, userKey);
@@ -116,7 +116,7 @@ public class UserController {
 			String tmpPass = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 10);
 			user.setPass(tmpPass);
 			userService.findUserPass(user);
-			naverMailSend(user.getEmail(), tmpPass, 1);
+			sendMail(user.getEmail(), tmpPass, 1);
 			return new ResponseEntity<Void>(HttpStatus.OK);
 		} catch (Exception e) {
 			return exceptionHandling(e);
@@ -217,10 +217,10 @@ public class UserController {
 		return new ResponseEntity<String>("Error : " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	public static void naverMailSend(String email, String key, int type) {
+	public static void sendMail(String email, String key, int type) {
 		String host = "smtp.naver.com"; // 네이버일 경우 네이버 계정, gmail경우 gmail 계정
-		String user = "kmj5692@naver.com"; // 패스워드
-		String password = "audwns8574";
+		String user = "homeinpage@naver.com"; // 패스워드
+		String password = "home-in-page";
 
 		// SMTP 서버 정보를 설정한다.
 		Properties props = new Properties();
@@ -244,7 +244,7 @@ public class UserController {
 				message.setSubject("Home:in 회원가입 인증 안내 메일");
 
 				// 메일 내용
-				message.setText("<a href='http://localhost:9999/user/certify?email=" + email + "&userKey=" + key + "'>이메일 인증</a>");
+				message.setText("http://localhost:9999/user/certify?email=" + email + "&userKey=" + key + "");
 			} else {
 				// 메일 제목
 				message.setSubject("Home:in 비밀번호 안내 메일");

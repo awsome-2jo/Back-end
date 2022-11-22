@@ -2,9 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ssafy.myHome.model.mapper.AptMapper">
-
-	<select id="selectApart" parameterType="aptSearchDto" resultType="aptInfoDto">
-		select info.aptCode, apartmentName, roadName, roadNameBonbun, lng, lat, buildYear, dealAmount, cast(area as float) as area
+	
+	<resultMap id="aptInfoDto" type="com.ssafy.myHome.model.AptInfoDto">
+		<result column="min_deal_amount" property="minDealAmount"/>
+		<result column="max_deal_amount" property="maxDealAmount"/>
+		<result column="min_area" property="minArea"/>
+		<result column="max_area" property="maxArea"/>
+	</resultMap>
+	
+	<select id="selectApart" parameterType="aptSearchDto" resultMap="aptInfoDto">
+		select info.aptCode, apartmentName, roadName, roadNameBonbun, lng, lat, buildYear, min_deal_amount, max_deal_amount, min_area, max_area
 		from houseinfo as info inner join housedeal as deal on info.aptCode = deal.aptCode
 		where apartmentName like concat('%', #{keyword}, '%') 
         and dongCode like concat(#{regcode}, '%')
@@ -12,8 +19,7 @@
         and cast(replace(dealAmount, ',', '') as unsigned) &lt;= #{maxdeal}
         and area &gt;= #{minarea}
         and area &lt;= #{maxarea}
-        and dealYear &gt;= 2020
-		group by aptCode limit 10 offset #{start}
+		group by aptCode limit #{amount} offset #{start}
 	</select>
 	
 	<select id="countApart" parameterType="aptSearchDto" resultType="int">
@@ -27,6 +33,12 @@
 		select buildYear, roadName, roadNameBonbun, apartmentName, lng, lat
 		from houseinfo
 		where aptCode = #{aptCode}
+	</select>
+	
+	<select id="selectApartByRegCode" parameterType="aptSearchDto" resultType="aptInfoDto">
+		select dealAmount, info.aptCode
+		from houseinfo as info inner join housedeal as deal on info.aptCode = deal.aptCode
+		where dongCode like concat(#{regcode}, '%')
 	</select>
 	
 	<select id="selectApartDetail" parameterType="String" resultType="aptDealDto">

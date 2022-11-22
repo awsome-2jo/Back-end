@@ -12,6 +12,7 @@
 		<typeAlias type="com.ssafy.myHome.model.NoticeParameterDto" alias="noticeParameterDto" />
 		<typeAlias type="com.ssafy.myHome.model.UserDto" alias="userDto" />
 		<typeAlias type="com.ssafy.myHome.model.SidoGugunCodeDto" alias="sidoGugunCodeDto" />
+		<typeAlias type="com.ssafy.myHome.model.FileInfoDto" alias="fileInfoDto" />
 	</typeAliases>
 	
 </configuration>

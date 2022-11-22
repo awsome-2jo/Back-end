@@ -25,6 +25,6 @@ public class NoticeDto {
 	@ApiModelProperty(value = "내용")
 	private String content;
 	
-	@ApiModelProperty(value = "필독 공지")
-	private int type;
+	@ApiModelProperty(value = "필독 여부")
+	private int type = 0;
 }

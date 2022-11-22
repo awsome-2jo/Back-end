@@ -87,42 +87,42 @@ public class AptController {
 		}
 	}
 	
-//	@Operation(summary = "아파트 목록 개수", description = "지역코드(regcode)(+검색어)를 보내면 해당하는 지역의 아파트 개수(count), dealAvg(평균 거래랑), priceAvg(평균 실거래가)를 반환한다.")
-//	@GetMapping("/list/count")
-//	public ResponseEntity<?> listAptCount(AptSearchDto aptSearch) {
-//		try {
-//			List<AptInfoDto> list;
-//			list = aptService.countApart(aptSearch);
-//			
-//			if (list != null && !list.isEmpty()) {
-//				Map<String, Object> res = new HashMap<>();
-//				int count = list.size();
-//				float sum = 0, avg = 0;
-//				int aptNums = 0;
-//				String aptCode = list.get(0).getAptCode();
-//				
-//				for (int i = 0; i < count; i++) {
-//					sum += Float.parseFloat(list.get(i).getDealAmount().replaceAll(",",""));
-//					String tmp = list.get(i).getAptCode();
-//					if (!aptCode.equals(tmp)) {
-//						aptCode = tmp;
-//						aptNums++;
-//					} 
-//				}
-//				
-//				avg = sum / count;
-//				res.put("count", count);
-//				res.put("priceAvg", avg);
-//				res.put("dealAvg", (float)count / aptNums);
-//				return new ResponseEntity<Map<String, Object>>(res, HttpStatus.OK);
-//			} else {
-//				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			return new ResponseEntity<String>("Error : " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-//		}
-//	}
+	@Operation(summary = "지역별 거래통계", description = "지역코드(regcode)(+검색어)를 보내면 해당하는 지역의 dealAvg(평균 거래랑), priceAvg(평균 실거래가)를 반환한다.")
+	@GetMapping("/list/stats")
+	public ResponseEntity<?> listAptStats(AptSearchDto aptSearch) {
+		try {
+			List<AptInfoDto> list;
+			list = aptService.selectApartByRegcode(aptSearch);
+			System.out.println(list.get(0).getDealAmount());
+			if (list != null && !list.isEmpty()) {
+				Map<String, Object> res = new HashMap<>();
+				int count = list.size();
+				float sum = 0, avg = 0;
+				int aptNums = 0;
+				String aptCode = list.get(0).getAptCode();
+				
+				for (int i = 0; i < count; i++) {
+					sum += Float.parseFloat(list.get(i).getDealAmount().replaceAll(",",""));
+					String tmp = list.get(i).getAptCode();
+					if (!aptCode.equals(tmp)) {
+						aptCode = tmp;
+						aptNums++;
+					} 
+				}
+				
+				avg = sum / count;
+				res.put("count", count);
+				res.put("priceAvg", Math.round(avg));
+				res.put("dealAvg", Math.round((float)count / aptNums));
+				return new ResponseEntity<Map<String, Object>>(res, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>("Error : " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 	
 	@Operation(summary = "아파트 상세정보", description = "아파트 코드(aptCode)를 보내면 해당 아파트의 상세정보를 반환한다.")
 	@GetMapping("/detail/{aptCode}")
