@@ -33,12 +33,11 @@ import io.swagger.v3.oas.annotations.Operation;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/naver")
-@Api("Naver 컨트롤러 Api")
-
-public class NaverController {
+@RequestMapping
+@Api("외부 API 컨트롤러")
+public class ExternalApiController {
 	@Operation(summary = "뉴스기사 받아오기", description = "(필수X) query(검색어, 기본으로 앞에 '부동산' 붙음), display(표시개수), start(시작점), sort(정렬기준) -> json 형태로 반환")
-	@GetMapping(value = "/news", produces = "text/plain;charset=UTF-8")
+	@GetMapping(value = "/naver/news", produces = "text/plain;charset=UTF-8")
 	public ResponseEntity<?> getNews(@RequestParam(required = false, defaultValue = "") String query,
 			@RequestParam(required = false, defaultValue = "10") Integer display,
 			@RequestParam(required = false, defaultValue = "1") Integer start,
@@ -48,7 +47,7 @@ public class NaverController {
 	}
 
 	@Operation(summary = "블로그 포스팅 받아오기", description = "(필수X) query(검색어, 기본으로 앞에 '부동산' 붙음), display(표시개수), start(시작점), sort(정렬기준) -> json 형태로 반환")
-	@GetMapping(value = "/blog", produces = "text/plain;charset=UTF-8")
+	@GetMapping(value = "/naver/blog", produces = "text/plain;charset=UTF-8")
 	public ResponseEntity<?> getBlog(@RequestParam(required = false, defaultValue = "") String query,
 			@RequestParam(required = false, defaultValue = "10") Integer display,
 			@RequestParam(required = false, defaultValue = "1") Integer start,
@@ -56,7 +55,43 @@ public class NaverController {
 		String kind = "blog.json?";
 		return getArticles(kind, "부동산 " + query, display, start, sort, 1);
 	}
+	
+	@Operation(summary = "학교 정보 받아오기", description = "")
+	@GetMapping(value = "/school/info", produces = "text/plain;charset=UTF-8")
+	public ResponseEntity<?> getSchool(
+			@RequestParam(required = false, defaultValue = "") String schName, 
+			@RequestParam(required = false, defaultValue = "") String location) throws Exception {
+		String apiKey = "af7dff02d8c448b1bc5dd069efe61b2e";
+		
+		schName = URLEncoder.encode(schName, "UTF-8");
+		location = URLEncoder.encode(location, "UTF-8");
 
+		String apiURL = "https://open.neis.go.kr/hub/schoolInfo?Type=json&SCHUL_NM=" 
+						+ schName + "&LCTN_SC_NM=" + location + "&KEY=" + apiKey;
+		
+		Map<String, String> requestHeaders = new HashMap<>();
+		String responseBody = get(apiURL, requestHeaders);
+		
+		JsonParser jsonParser = new BasicJsonParser();
+		Map<String, Object> map = jsonParser.parseMap(responseBody);
+		
+		ArrayList list = (ArrayList)map.get("schoolInfo");
+		ArrayList list2 = (ArrayList)((Map)list.get(1)).get("row");
+		
+		Map<String, Object> res = new HashMap<String, Object>();
+		
+		res.put("schName", ((Map)list2.get(0)).get("SCHUL_NM").toString());
+		res.put("coedu", ((Map)list2.get(0)).get("COEDU_SC_NM").toString());
+		res.put("public", ((Map)list2.get(0)).get("FOND_SC_NM").toString());
+		res.put("tel", ((Map)list2.get(0)).get("ORG_TELNO").toString());
+		res.put("location", ((Map)list2.get(0)).get("ORG_RDNMA").toString());
+		res.put("web", ((Map)list2.get(0)).get("HMPG_ADRES").toString());
+		
+		JSONObject jres = new JSONObject(res);
+		
+		return new ResponseEntity<String>(jres.toString(), HttpStatus.OK);
+	}
+	
 	public ResponseEntity<?> getArticles(String kind, String query, Integer display, Integer start, String sort,
 			int type) throws Exception {
 		String clientId = "erff13rBEZnSA5y3uKYt"; // 애플리케이션 클라이언트 아이디
@@ -77,7 +112,6 @@ public class NaverController {
 		requestHeaders.put("X-Naver-Client-Secret", clientSecret);
 
 		String responseBody = get(apiURL, requestHeaders);
-//        System.out.println(responseBody);
 		// ========================================================
 		
 		JsonParser jsonParser = new BasicJsonParser();
@@ -85,7 +119,7 @@ public class NaverController {
 		
 		String defImg = "https://blogimgs.pstatic.net/nblog/mylog/post/og_default_image_160610.png";
 		JSONArray arr = new JSONArray();
-		ArrayList<Object> list = (ArrayList) (map.get("items"));
+		ArrayList list = (ArrayList)map.get("items");
 		String[] words = {"title", "originallink", "description"};
 		String[] nexts = {"originallink", "link", "pubDate"};
 		if (list.size() != 0) {
@@ -113,10 +147,6 @@ public class NaverController {
 						Document doc = Jsoup.connect(item.get("originallink").toString()).get();
 						image = doc.select("meta[property='og:image']").attr("content");
 						
-						item.put("image", image);
-						JSONObject jmap = new JSONObject(item);
-						arr.add(jmap);
-						item.clear();
 					}
 				}
 				// 블로그 포스팅 썸네일
@@ -150,17 +180,15 @@ public class NaverController {
 
 					if (image.equals("") || image.equals(null))
 						image = defImg;
-					
-					item.put("image", image);
-					JSONObject jmap = new JSONObject(item);
-					arr.add(jmap);
 				}
+
+				item.put("image", image);
+				JSONObject jmap = new JSONObject(item);
+				arr.add(jmap);
 			}
 		} else {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
-		
-	
 		return new ResponseEntity<String>(arr.toString(), HttpStatus.OK);
 	}
 
