@@ -11,7 +11,7 @@ public class AptSearchDto {
 	private String regcode = "";
 
 	@ApiModelProperty(value = "검색량", example = "10")
-	private int amount;
+	private int amount = 10;
 	
 	@ApiModelProperty(value = "검색어", example = "동아")
 	private String keyword = "";

@@ -17,7 +17,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.boot.json.BasicJsonParser;
 import org.springframework.boot.json.JsonParser;
@@ -72,7 +71,7 @@ public class NaverController {
 
 		String apiURL = "https://openapi.naver.com/v1/search/" + kind + "query=" + query + "&display=" + display
 				+ "&start=" + start + "&sort=" + sort; // JSON 결과
-
+		
 		Map<String, String> requestHeaders = new HashMap<>();
 		requestHeaders.put("X-Naver-Client-Id", clientId);
 		requestHeaders.put("X-Naver-Client-Secret", clientSecret);
@@ -80,35 +79,54 @@ public class NaverController {
 		String responseBody = get(apiURL, requestHeaders);
 //        System.out.println(responseBody);
 		// ========================================================
-
+		
 		JsonParser jsonParser = new BasicJsonParser();
 		Map<String, Object> map = jsonParser.parseMap(responseBody);
-
+		
 		String defImg = "https://blogimgs.pstatic.net/nblog/mylog/post/og_default_image_160610.png";
 		JSONArray arr = new JSONArray();
-		ArrayList list = (ArrayList) (map.get("items"));
+		ArrayList<Object> list = (ArrayList) (map.get("items"));
+		String[] words = {"title", "originallink", "description"};
+		String[] nexts = {"originallink", "link", "pubDate"};
 		if (list.size() != 0) {
 			for (int i = 0; i < list.size(); i++) {
-				Map<String, Object> item = null;
+				Map<String, Object> item = new HashMap<>();
 				String link = "";
 				String image = "";
-
-				if (list.get(i) instanceof String) {
-					item = jsonParser.parseMap((String) list.get(i));
-				} else {
-					item = (Map<String, Object>) list.get(i);
-				}
-
+				
+				String tmp = list.get(i).toString().replaceAll(":\"", "=").replaceAll("\"", "").replaceAll("	", "")
+								.replaceAll("link","*link").replaceAll("pubDate","*pubDate").replaceAll("original\\*link", "*originallink");
+				
+				System.out.println(tmp);
 				// 뉴스 기사 썸네일
 				if (type == 0) {
-					link = (String) item.get("originallink");
-
-					Document doc = Jsoup.connect(link).get();
-					image = doc.select("meta[property='og:image']").attr("content");
-
+					int cnt = tmp.length() - tmp.replace(String.valueOf('{'), "").length();
+					for (int loop = 0; loop < cnt; loop++) {
+						int idx = 0;
+						int next = 0;
+						for (int j = 0; j < words.length; j++) {
+							idx = tmp.indexOf(words[j]) + words[j].length() + 1;
+							String val = tmp.substring(idx, (tmp.substring(idx).indexOf("*") + idx)).replaceAll("	", "").trim();
+							val = val.substring(0, val.lastIndexOf(","));
+							item.put(words[j], val);
+						}
+						tmp = tmp.substring(idx);
+						Document doc = Jsoup.connect(item.get("originallink").toString()).get();
+						image = doc.select("meta[property='og:image']").attr("content");
+						
+						item.put("image", image);
+						JSONObject jmap = new JSONObject(item);
+						arr.add(jmap);
+						item.clear();
+					}
 				}
 				// 블로그 포스팅 썸네일
 				else {
+					if (list.get(i) instanceof String) {
+						item = jsonParser.parseMap((String) list.get(i));
+					} else {
+						item = (Map<String, Object>) list.get(i);
+					}
 					link = (String) item.get("link");
 
 					Document doc = Jsoup.connect(link).get();
@@ -133,16 +151,17 @@ public class NaverController {
 
 					if (image.equals("") || image.equals(null))
 						image = defImg;
+					
+					item.put("image", image);
+					JSONObject jmap = new JSONObject(item);
+					arr.add(jmap);
 				}
-
-				item.put("image", image);
-				JSONObject jmap = new JSONObject(item);
-				arr.add(jmap);
 			}
 		} else {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
-//		return new ResponseEntity<String>(responseBody, HttpStatus.OK);
+		
+	
 		return new ResponseEntity<String>(arr.toString(), HttpStatus.OK);
 	}
 

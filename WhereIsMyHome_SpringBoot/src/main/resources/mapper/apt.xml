@@ -2,57 +2,58 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ssafy.myHome.model.mapper.AptMapper">
-	
+
 	<resultMap id="aptInfoDto" type="com.ssafy.myHome.model.AptInfoDto">
-		<result column="min_deal_amount" property="minDealAmount"/>
-		<result column="max_deal_amount" property="maxDealAmount"/>
-		<result column="min_area" property="minArea"/>
-		<result column="max_area" property="maxArea"/>
+		<result column="min_deal_amount" property="minDealAmount" />
+		<result column="max_deal_amount" property="maxDealAmount" />
+		<result column="min_area" property="minArea" />
+		<result column="max_area" property="maxArea" />
 	</resultMap>
-	
+
 	<select id="selectApart" parameterType="aptSearchDto" resultMap="aptInfoDto">
-		select info.aptCode, apartmentName, roadName, roadNameBonbun, lng, lat, buildYear, min_deal_amount, max_deal_amount, min_area, max_area
+		select info.aptCode, apartmentName, roadName, roadNameBonbun, lng, lat, buildYear, min_deal_amount, max_deal_amount, min_area, max_area 
 		from houseinfo as info inner join housedeal as deal on info.aptCode = deal.aptCode
 		where apartmentName like concat('%', #{keyword}, '%') 
-        and dongCode like concat(#{regcode}, '%')
-        and cast(replace(dealAmount, ',', '') as unsigned) &gt;= #{mindeal}
-        and cast(replace(dealAmount, ',', '') as unsigned) &lt;= #{maxdeal}
-        and area &gt;= #{minarea}
-        and area &lt;= #{maxarea}
-		group by aptCode limit #{amount} offset #{start}
+		and dongCode like concat(#{regcode}, '%') 
+		and cast(replace(dealAmount, ',', '') as unsigned) &gt;= #{mindeal}
+		and cast(replace(dealAmount, ',', '') as unsigned) &lt;= #{maxdeal}
+		and area &gt;= #{minarea} 
+		and area &lt;= #{maxarea} 
+		group by aptCode 
+		limit #{amount} offset #{start}
 	</select>
-	
+
 	<select id="countApart" parameterType="aptSearchDto" resultType="int">
 		select count(aptCode)
 		from houseinfo
 		where dongCode like concat(#{regcode}, '%')
 		and apartmentName like concat('%', #{keyword}, '%')
 	</select>
-	
+
 	<select id="selectApartByAptCode" parameterType="String" resultType="aptInfoDto">
 		select buildYear, roadName, roadNameBonbun, apartmentName, lng, lat
 		from houseinfo
 		where aptCode = #{aptCode}
 	</select>
-	
+
 	<select id="selectApartByRegCode" parameterType="aptSearchDto" resultType="aptInfoDto">
 		select dealAmount, info.aptCode
 		from houseinfo as info inner join housedeal as deal on info.aptCode = deal.aptCode
 		where dongCode like concat(#{regcode}, '%')
 	</select>
-	
+
 	<select id="selectApartDetail" parameterType="String" resultType="aptDealDto">
 		select no, dealAmount, dealYear, dealMonth, dealDay, area, floor, cancelDealType
 		from housedeal
 		where aptCode = #{aptCode}
-	</select> 
-	
+	</select>
+
 	<select id="selectSido" resultType="sidoGugunCodeDto">
 		select left(code, 2)code, name
 		from sidocode
 		order by code;
 	</select>
-	
+
 	<select id="selectGugun" parameterType="string" resultType="sidoGugunCodeDto">
 		select left(code, 5)code, name
 		from guguncode
@@ -60,7 +61,7 @@
 		and name is not null
 		order by code
 	</select>
-	
+
 	<select id="selectDong" parameterType="string" resultType="sidoGugunCodeDto">
 		select distinct code, name
 		from dongcode
@@ -68,5 +69,5 @@
 		and name is not null
 		order by code;
 	</select>
-	
+
 </mapper>
