@@ -97,7 +97,6 @@ public class NaverController {
 				String tmp = list.get(i).toString().replaceAll(":\"", "=").replaceAll("\"", "").replaceAll("	", "")
 								.replaceAll("link","*link").replaceAll("pubDate","*pubDate").replaceAll("original\\*link", "*originallink");
 				
-				System.out.println(tmp);
 				// 뉴스 기사 썸네일
 				if (type == 0) {
 					int cnt = tmp.length() - tmp.replace(String.valueOf('{'), "").length();
