@@ -1,5 +1,6 @@
 package com.ssafy.myHome.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.myHome.model.AptDealDto;
@@ -58,6 +58,16 @@ public class AptController {
 			list = aptService.selectApart(aptSearch);
 			
 			if (list != null && !list.isEmpty()) {
+				for (int i = 0; i < list.size(); i++) {
+					aptSearch.setAptCode(list.get(i).getAptCode());
+					AptInfoDto tmp = aptService.selectApartDeal(aptSearch);
+					
+					list.get(i).setMaxDealAmount(tmp.getMaxDealAmount());
+					list.get(i).setMinDealAmount(tmp.getMinDealAmount());
+					list.get(i).setMaxArea(tmp.getMaxArea());
+					list.get(i).setMinArea(tmp.getMinArea());
+				}
+				
 				return new ResponseEntity<List<AptInfoDto>>(list, HttpStatus.OK);
 			} else {
 				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);

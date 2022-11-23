@@ -60,4 +60,9 @@ public class AptServiceImpl implements AptService {
 		return aptMapper.selectApartByRegCode(aptSearch);
 	}
 
+	@Override
+	public AptInfoDto selectApartDeal(AptSearchDto aptSearch) throws Exception {
+		return aptMapper.selectApartDeal(aptSearch);
+	}
+
 }

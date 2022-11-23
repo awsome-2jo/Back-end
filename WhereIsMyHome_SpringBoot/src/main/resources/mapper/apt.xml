@@ -11,18 +11,37 @@
 	</resultMap>
 
 	<select id="selectApart" parameterType="aptSearchDto" resultMap="aptInfoDto">
-		select info.aptCode, apartmentName, roadName, roadNameBonbun, lng, lat, buildYear, min_deal_amount, max_deal_amount, min_area, max_area 
+		<!-- select info.aptCode, apartmentName, roadName, roadNameBonbun, lng, lat, buildYear, min_deal_amount, max_deal_amount, min_area, max_area 
 		from houseinfo as info inner join housedeal as deal on info.aptCode = deal.aptCode
 		where apartmentName like concat('%', #{keyword}, '%') 
 		and dongCode like concat(#{regcode}, '%') 
-		and cast(replace(dealAmount, ',', '') as unsigned) &gt;= #{mindeal}
-		and cast(replace(dealAmount, ',', '') as unsigned) &lt;= #{maxdeal}
-		and area &gt;= #{minarea} 
-		and area &lt;= #{maxarea} 
+		and cast(replace(dealAmount, ',', '') as unsigned) &gt;= #{minDeal}
+		and cast(replace(dealAmount, ',', '') as unsigned) &lt;= #{maxDeal}
+		and area &gt;= #{minArea} 
+		and area &lt;= #{maxArea} 
+		group by aptCode 
+		limit #{amount} offset #{start} -->
+		
+		select aptCode, apartmentName, roadName, roadNameBonbun, lng, lat, buildYear
+		from houseinfo
+		where apartmentName like concat('%', #{keyword}, '%') 
+		and dongCode like concat(#{regcode}, '%')
 		group by aptCode 
 		limit #{amount} offset #{start}
 	</select>
-
+	
+	<select id="selectApartDeal" parameterType="aptSearchDto" resultMap="aptInfoDto">
+		select aptCode, max(max_deal_amount) as max_deal_amount, min(min_deal_amount) as min_deal_amount, max(max_area) as max_area, min(min_area) as min_area
+		from housedeal_stats
+		where aptCode = #{aptCode}
+		and dealYear &gt;= #{minYear}
+		and dealYear &lt;= #{maxYear}
+		and min_deal_amount &gt;= #{minDeal}
+		and max_deal_amount &lt; #{maxDeal}
+		and min_area &gt;= #{minArea}
+		and max_area &lt; #{maxArea}
+	</select>
+	
 	<select id="countApart" parameterType="aptSearchDto" resultType="int">
 		select count(aptCode)
 		from houseinfo

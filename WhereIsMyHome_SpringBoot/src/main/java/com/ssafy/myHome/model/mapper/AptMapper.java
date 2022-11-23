@@ -13,6 +13,7 @@ import com.ssafy.myHome.model.SidoGugunCodeDto;
 public interface AptMapper {
 	// 필요한 아파트 정보 가져오기
 	public List<AptInfoDto> selectApart(AptSearchDto aptSearch) throws Exception; 
+	public AptInfoDto selectApartDeal(AptSearchDto aptSearch) throws Exception; 
 	public List<AptDealDto> selectApartDetail(String aptCode) throws Exception;
 	public int countApart(AptSearchDto aptSearch) throws Exception;
 	public List<SidoGugunCodeDto> selectSido() throws Exception;

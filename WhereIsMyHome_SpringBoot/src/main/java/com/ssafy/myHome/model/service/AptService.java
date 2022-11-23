@@ -9,6 +9,7 @@ import com.ssafy.myHome.model.SidoGugunCodeDto;
 
 public interface AptService {
 	List<AptInfoDto> selectApart(AptSearchDto aptSearch) throws Exception;
+	AptInfoDto selectApartDeal(AptSearchDto aptSearch) throws Exception;
 	List<AptDealDto> selectApartDetail(String aptCode) throws Exception;
 	int countApart(AptSearchDto aptSearch) throws Exception;
 	List<SidoGugunCodeDto> getSido() throws Exception;
