@@ -4,6 +4,10 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+/**
+ * 아파트 거래정보 DTO
+ */
+
 @ApiModel(value = "AptDealDto : 아파트 거래 정보", description = "아파트 거래 번호, 매매 가격, 거래 년도, 거래 월, 거래 일, 면적, 층수")
 @Data
 public class AptDealDto {
